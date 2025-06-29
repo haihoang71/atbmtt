@@ -1,6 +1,0 @@
-[2025-06-29 09:35:24] [INFO] [server2_socket] === LOGGER KHỞI TẠO: server2_socket ===
-[2025-06-29 09:35:24] [INFO] [server2_socket] Log directory: D:\Project\Legal_documment_transfer\logs
-[2025-06-29 09:35:24] [INFO] [server2_socket] Log level: INFO
-[2025-06-29 09:35:24] [INFO] [server2_socket] File logging: True
-[2025-06-29 09:35:24] [INFO] [server2_socket] Console logging: False
-[2025-06-29 09:35:24] [INFO] [server2_socket] Server đang lắng nghe tại 192.168.137.1:8000
