@@ -1,0 +1,12 @@
+[2025-06-29 09:32:34] [INFO] [receiver_socket] === LOGGER KHỞI TẠO: receiver_socket ===
+[2025-06-29 09:32:34] [INFO] [receiver_socket] Log directory: D:\Project\Legal_documment_transfer\logs
+[2025-06-29 09:32:34] [INFO] [receiver_socket] Log level: INFO
+[2025-06-29 09:32:34] [INFO] [receiver_socket] File logging: True
+[2025-06-29 09:32:34] [INFO] [receiver_socket] Console logging: False
+[2025-06-29 09:32:35] [INFO] [receiver_socket] Server đang lắng nghe tại 192.168.137.1:8000
+[2025-06-29 09:34:35] [INFO] [receiver_socket] === LOGGER KHỞI TẠO: receiver_socket ===
+[2025-06-29 09:34:35] [INFO] [receiver_socket] Log directory: D:\Project\Legal_documment_transfer\logs
+[2025-06-29 09:34:35] [INFO] [receiver_socket] Log level: INFO
+[2025-06-29 09:34:35] [INFO] [receiver_socket] File logging: True
+[2025-06-29 09:34:35] [INFO] [receiver_socket] Console logging: False
+[2025-06-29 09:34:36] [INFO] [receiver_socket] Server đang lắng nghe tại 192.168.137.1:8000

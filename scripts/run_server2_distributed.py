@@ -8,9 +8,10 @@ from pathlib import Path
 import argparse
 import threading
 sys.path.append(str(Path(__file__).parent.parent / "src"))
+sys.path.append(str(Path(__file__).parent.parent))
 
 from config.network_config import get_config
-from src.components.server_intermediate import ServerIntermediate
+from src.components.server_intermediate import create_server2
 from src.gui.server_gui import ServerGUI
 
 def main():
@@ -25,12 +26,17 @@ def main():
     if args.upstream_host:
         config["upstream_host"] = args.upstream_host
 
-    server = ServerIntermediate(
+    server = create_server2(
         host=config["host"],
         port=config["port"],
         upstream_host=config["upstream_host"],
         upstream_port=config["upstream_port"]
     )
+    
+    if not server.start():
+        print("Không thể khởi động Server 2")
+        return
+        
     threading.Thread(target=server.run, daemon=True).start()
     gui = ServerGUI(server_name="Server 2")
     gui.run()

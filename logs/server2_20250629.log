@@ -1,0 +1,16 @@
+[2025-06-29 09:35:24] [INFO] [server2] === LOGGER KHỞI TẠO: server2 ===
+[2025-06-29 09:35:24] [INFO] [server2] Log directory: D:\Project\Legal_documment_transfer\logs
+[2025-06-29 09:35:24] [INFO] [server2] Log level: INFO
+[2025-06-29 09:35:24] [INFO] [server2] File logging: True
+[2025-06-29 09:35:24] [INFO] [server2] Console logging: False
+[2025-06-29 09:35:24] [INFO] [server2] === PROTOCOL HANDLER KHỞI TẠO: server2 ===
+[2025-06-29 09:35:24] [INFO] [server2] === INTERMEDIATE SERVER KHỞI TẠO: server2 ===
+[2025-06-29 09:35:24] [INFO] [server2] Bind: 192.168.137.1:8000
+[2025-06-29 09:35:24] [INFO] [server2] Upstream: 192.168.1.13:8000
+[2025-06-29 09:35:24] [INFO] [server2] Khởi động server2...
+[2025-06-29 09:35:24] [INFO] [server2] Bắt đầu forwarding worker
+[2025-06-29 09:35:24] [INFO] [server2] Đã khởi động forwarding thread
+[2025-06-29 09:35:24] [INFO] [server2] Bắt đầu cleanup worker
+[2025-06-29 09:35:24] [INFO] [server2] Đã khởi động cleanup thread
+[2025-06-29 09:35:24] [INFO] [server2] server2 ĐÃ KHỞI ĐỘNG THÀNH CÔNG!
+[2025-06-29 09:35:24] [INFO] [server2] Bắt đầu main loop của server2

@@ -2,6 +2,7 @@ import sys
 from pathlib import Path
 import argparse
 sys.path.append(str(Path(__file__).parent.parent / "src"))
+sys.path.append(str(Path(__file__).parent.parent))
 
 from config.network_config import get_config
 from src.components.receiver import Receiver

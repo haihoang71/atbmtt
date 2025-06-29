@@ -1,0 +1,12 @@
+[2025-06-29 09:32:34] [INFO] [receiver] === LOGGER KHỞI TẠO: receiver ===
+[2025-06-29 09:32:34] [INFO] [receiver] Log directory: D:\Project\Legal_documment_transfer\logs
+[2025-06-29 09:32:34] [INFO] [receiver] Log level: INFO
+[2025-06-29 09:32:34] [INFO] [receiver] File logging: True
+[2025-06-29 09:32:34] [INFO] [receiver] Console logging: False
+[2025-06-29 09:32:35] [INFO] [receiver] [CRYPTO] Generated RSA 2048-bit keypair
+[2025-06-29 09:34:35] [INFO] [receiver] === LOGGER KHỞI TẠO: receiver ===
+[2025-06-29 09:34:35] [INFO] [receiver] Log directory: D:\Project\Legal_documment_transfer\logs
+[2025-06-29 09:34:35] [INFO] [receiver] Log level: INFO
+[2025-06-29 09:34:35] [INFO] [receiver] File logging: True
+[2025-06-29 09:34:35] [INFO] [receiver] Console logging: False
+[2025-06-29 09:34:36] [INFO] [receiver] [CRYPTO] Generated RSA 2048-bit keypair
