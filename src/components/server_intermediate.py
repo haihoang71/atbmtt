@@ -230,9 +230,16 @@ class IntermediateServer:
 
     def _forward_message(self, message) -> Optional[Dict[str, Any]]:
         try:
+            self._log("info", f"[FORWARD] Bắt đầu forward message '{message.get('type')}' tới Server2 ({self.upstream_host}:{self.upstream_port})")
             upstream_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             upstream_socket.settimeout(10)
-            upstream_socket.connect((self.upstream_host, self.upstream_port))
+            try:
+                upstream_socket.connect((self.upstream_host, self.upstream_port))
+                self._log("info", f"[FORWARD] Kết nối tới Server2 thành công.")
+            except Exception as e:
+                self._log("error", f"[FORWARD] Không thể kết nối tới Server2 ({self.upstream_host}:{self.upstream_port}): {e}")
+                upstream_socket.close()
+                return None
 
             # Send message (length-prefixed)
             if isinstance(message, dict):
@@ -242,25 +249,39 @@ class IntermediateServer:
             message_bytes = message_json.encode('utf-8')
             message_length = len(message_bytes)
             length_bytes = message_length.to_bytes(4, byteorder='big')
-            upstream_socket.sendall(length_bytes)
-            upstream_socket.sendall(message_bytes)
+            try:
+                upstream_socket.sendall(length_bytes)
+                upstream_socket.sendall(message_bytes)
+                self._log("info", f"[FORWARD] Đã gửi message '{message.get('type')}' tới Server2.")
+            except Exception as e:
+                self._log("error", f"[FORWARD] Lỗi khi gửi message tới Server2: {e}")
+                upstream_socket.close()
+                return None
 
             # Receive response (length-prefixed)
-            length_bytes = self._receive_exact(upstream_socket, 4)
-            if not length_bytes:
+            try:
+                length_bytes = self._receive_exact(upstream_socket, 4)
+                if not length_bytes:
+                    self._log("error", "[FORWARD] Không nhận được độ dài phản hồi từ Server2.")
+                    upstream_socket.close()
+                    return None
+                response_length = int.from_bytes(length_bytes, byteorder='big')
+                response_bytes = self._receive_exact(upstream_socket, response_length)
+                if not response_bytes:
+                    self._log("error", "[FORWARD] Không nhận được phản hồi từ Server2.")
+                    upstream_socket.close()
+                    return None
+                response = json.loads(response_bytes.decode('utf-8'))
+                self._log("info", f"[FORWARD] Nhận phản hồi từ Server2 thành công.")
+                upstream_socket.close()
+                return response
+            except Exception as e:
+                self._log("error", f"[FORWARD] Lỗi khi nhận phản hồi từ Server2: {e}")
                 upstream_socket.close()
                 return None
-            response_length = int.from_bytes(length_bytes, byteorder='big')
-            response_bytes = self._receive_exact(upstream_socket, response_length)
-            if not response_bytes:
-                upstream_socket.close()
-                return None
-            response = json.loads(response_bytes.decode('utf-8'))
-            upstream_socket.close()
-            return response
 
         except Exception as e:
-            self.logger.error(f'Lỗi forward/wait response: {e}')
+            self._log("error", f'[FORWARD] Lỗi forward/wait response: {e}')
             return None
 
     def _send_to_client(self, client_id: str, message):

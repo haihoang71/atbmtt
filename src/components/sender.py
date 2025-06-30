@@ -84,16 +84,17 @@ class Sender:
         Returns:
             bool: True nếu kết nối thành công
         """
+        self._log("info", f"[CONNECT] Đang kết nối tới Server1 ({self.socket_handler.host}:{self.socket_handler.port})...")
         try:
             if self.socket_handler.connect():
                 self.is_connected = True
-                self._log("info", "Đã kết nối đến Server 1")
+                self._log("info", "[CONNECT] Đã kết nối đến Server 1 thành công.")
                 return True
             else:
-                self._log("error", "Không thể kết nối đến Server 1")
+                self._log("error", "[CONNECT] Không thể kết nối đến Server 1.")
                 return False
         except Exception as e:
-            self._log("error", f"Lỗi kết nối: {e}")
+            self._log("error", f"[CONNECT] Lỗi kết nối: {e}")
             return False
 
     def disconnect(self):
@@ -114,6 +115,7 @@ class Sender:
         try:
             if not self.is_connected:
                 if not self.connect_to_server():
+                    self._log("error", "[HANDSHAKE] Không thể kết nối tới Server1 để handshake.")
                     return False
             # Bước 1: Gửi "Hello" qua Server 1
             if not self.current_transaction_id:
@@ -128,32 +130,32 @@ class Sender:
                 destination='receiver',
                 transaction_id=self.current_transaction_id
             )
-            self._log("info", "Gửi Hello! đến Receiver qua Server 1 → Server 2")
+            self._log("info", "[HANDSHAKE] Gửi Hello! đến Receiver qua Server 1 → Server 2")
             if not self.socket_handler.send(hello_message):
-                self._log("error", "Không thể gửi Hello!")
+                self._log("error", "[HANDSHAKE] Không thể gửi Hello!")
                 return False
 
             # Bước 2: Chờ nhận "Ready" từ Receiver
-            self._log("info", "Chờ nhận Ready! từ Receiver...")
+            self._log("info", "[HANDSHAKE] Chờ nhận Ready! từ Receiver...")
             ready_message = self.socket_handler.receive()
             if not ready_message:
-                self._log("error", "Không nhận được phản hồi Ready!")
+                self._log("error", "[HANDSHAKE] Không nhận được phản hồi Ready! (có thể Server1 hoặc Server2 hoặc Receiver không phản hồi)")
                 return False
             if ready_message.get('type') != MessageTypes.READY:
-                self._log("error", f"Nhận được message không mong đợi: {ready_message.get('type')}")
+                self._log("error", f"[HANDSHAKE] Nhận được message không mong đợi: {ready_message.get('type')}")
                 return False
             if ready_message.get('data', {}).get('message') != 'Ready!':
-                self._log("error", "Message Ready! không đúng format")
+                self._log("error", "[HANDSHAKE] Message Ready! không đúng format")
                 return False
             if ready_message.get('transaction_id') != self.current_transaction_id:
-                self._log("error", "Transaction ID không khớp trong READY!")
+                self._log("error", "[HANDSHAKE] Transaction ID không khớp trong READY!")
                 return False
 
-            self._log("info", "HANDSHAKE thành công")
+            self._log("info", "[HANDSHAKE] HANDSHAKE thành công")
             self.stats['handshake_time'] = time.time() - start_time
             return True
         except Exception as e:
-            self._log("error", f"Lỗi trong quá trình handshake: {e}")
+            self._log("error", f"[HANDSHAKE] Lỗi trong quá trình handshake: {e}")
             return False
         
     def request_public_key(self) -> bool:

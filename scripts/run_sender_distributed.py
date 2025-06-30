@@ -2,7 +2,7 @@ import sys
 from pathlib import Path
 import argparse
 sys.path.append(str(Path(__file__).parent.parent / "src"))
-sys.path.append(str(Path(__file__).parent.parent))  # Add root directory for config module
+sys.path.append(str(Path(__file__).parent.parent))
 
 from config.network_config import get_config
 from src.gui.sender_gui import SenderGUI
