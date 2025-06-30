@@ -105,11 +105,6 @@ class Sender:
             self._log("info", "Đã ngắt kết nối khỏi Server 1")
 
     def perform_handshake(self) -> bool:
-        """
-        Thực hiện bước Handshake
-        Sender → Server1 → Server2 → Receiver: "Hello!"
-        Receiver → Server2 → Server1 → Sender: "Ready!"
-        """
         start_time = time.time()
         self._log("info", "=== BẮT ĐẦU HANDSHAKE ===")
         try:
@@ -157,17 +152,18 @@ class Sender:
         except Exception as e:
             self._log("error", f"[HANDSHAKE] Lỗi trong quá trình handshake: {e}")
             return False
-        
+
     def request_public_key(self) -> bool:
         """
-        Kết nối đến receiver và lấy public key.
-        Returns True nếu thành công, False nếu thất bại.
+        Lấy public key từ receiver, chỉ lấy lại nếu chưa có.
         """
+        if self.receiver_public_key is not None:
+            self._log("info", "Đã có public key của receiver, bỏ qua bước lấy lại.")
+            return True
         self._log("info", "Kết nối để lấy Public Key từ Receiver...")
         if not self.connect_to_server():
             self._log("error", "Không thể kết nối để lấy Public Key")
             return False
-
         get_key_message = create_message(
             "GET_PUBLIC_KEY",
             data={},
@@ -178,7 +174,6 @@ class Sender:
         if not self.socket_handler.send(get_key_message):
             self._log("error", "Không thể gửi GET_PUBLIC_KEY")
             return False
-
         pubkey_message = self.socket_handler.receive()
         if not pubkey_message or pubkey_message.get('type') != MessageTypes.PUBLIC_KEY:
             self._log("error", "Không nhận được Public Key từ Receiver")
@@ -389,52 +384,34 @@ class Sender:
     def send_file_complete_flow(self, file_path: str, transaction_id: str = None) -> bool:
         """
         Thực hiện toàn bộ luồng gửi file
-        1. Handshake
+        1. Request Public Key
         2. Key Exchange  
         3. Encrypt & Send File
         4. Wait for ACK
-        
-        Args:
-            file_path: Đường dẫn file cần gửi
-            transaction_id: ID giao dịch
-            
-        Returns:
-            bool: True nếu toàn bộ luồng thành công
         """
         total_start_time = time.time()
         self._log("info", f"=== BẮT ĐẦU QUÁ TRÌNH GỬI FILE: {file_path} ===")
-        
         try:
-            # Bước 1: Kết nối đến server
+            # Đảm bảo đã handshake trước đó
             if not self.is_connected:
-                if not self.connect_to_server():
-                    return False
-            
-            # Bước 2: Handshake
-            if not self.perform_handshake():
-                self._log("error", "Handshake thất bại")
+                self._log("error", "Chưa handshake. Hãy thực hiện handshake trước!")
                 return False
-            
-            # Bước 2.5: Lấy public key từ Receiver
+            # Bước 1: Lấy public key từ Receiver
+            self.receiver_public_key = None  # reset để luôn lấy lại public key mới
             if not self.request_public_key():
                 self._log("error", "Lấy public key thất bại")
                 return False
-            
-            # Bước 3: Trao đổi khóa
+            # Bước 2: Trao đổi khóa
             if not self.exchange_keys():
                 self._log("error", "Trao đổi khóa thất bại")
                 return False
-            
-            # Bước 4: Mã hóa và gửi file
+            # Bước 3: Mã hóa và gửi file
             if not self.encrypt_and_send_file(file_path, transaction_id):
                 self._log("error", "Gửi file thất bại")
                 return False
-            
-            # Bước 5: Chờ ACK/NACK
+            # Bước 4: Chờ ACK/NACK
             success, message = self.wait_for_acknowledgment()
-            
             total_time = time.time() - total_start_time
-            
             if success:
                 self._log("info", f"HOÀN THÀNH GỬI FILE THÀNH CÔNG! (Tổng: {total_time:.3f}s)")
                 self._log("info", f"Transaction ID: {self.current_transaction_id}")
@@ -442,12 +419,10 @@ class Sender:
             else:
                 self._log("error", f"GỬI FILE THẤT BẠI: {message}")
                 return False
-                
         except Exception as e:
             self._log("error", f"Lỗi trong quá trình gửi file: {e}")
             return False
         finally:
-            # Log thống kê cuối cùng
             self._log_statistics()
 
     def _log_statistics(self):

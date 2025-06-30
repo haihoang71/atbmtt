@@ -59,39 +59,32 @@ class SenderApp:
 
     def send_file(self, file_path):
         """Gửi file khi được chọn"""
-        if not self.is_connected or not self.sender:
-            self.gui.log("error", "Chưa kết nối. Hãy thực hiện handshake trước!")
+        if not self.sender:
+            self.gui.log("error", "Sender chưa khởi tạo. Hãy thực hiện handshake trước!")
             return
-        
         def do_send():
             try:
                 self.gui.log("info", f"Bắt đầu gửi file: {file_path}")
-                
                 # Lấy public key từ receiver
                 if not self.sender.request_public_key():
                     self.gui.log("error", "Không thể lấy public key từ receiver")
                     return
-                
                 # Trao đổi khóa
                 if not self.sender.exchange_keys():
                     self.gui.log("error", "Trao đổi khóa thất bại")
                     return
-                
                 # Mã hóa và gửi file
                 if not self.sender.encrypt_and_send_file(file_path):
                     self.gui.log("error", "Gửi file thất bại")
                     return
-                
                 # Chờ ACK/NACK
                 success, message = self.sender.wait_for_acknowledgment()
                 if success:
                     self.gui.log("info", "Gửi file thành công!")
                 else:
                     self.gui.log("error", f"Gửi file thất bại: {message}")
-                    
             except Exception as e:
                 self.gui.log("error", f"Lỗi gửi file: {e}")
-        
         threading.Thread(target=do_send, daemon=True).start()
 
     def run(self):

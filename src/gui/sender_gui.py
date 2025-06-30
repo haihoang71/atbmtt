@@ -36,13 +36,6 @@ class SenderGUI:
         self.status_color = "#BDBDBD"  # xám
         self.last_connect_time = tk.StringVar(value="-")
 
-        # Khởi tạo Sender với log_callback
-        self.sender = Sender(
-            server1_host=config["server1_host"],
-            server1_port=config["server1_port"],
-            log_callback=self.log
-        )
-
         # Callbacks
         self.handshake_callback = None
         self.send_file_callback = None
@@ -170,18 +163,21 @@ class SenderGUI:
         threading.Thread(target=self._do_handshake, daemon=True).start()
 
     def _do_handshake(self):
-        ok = self.sender.perform_handshake()
-        if ok:
-            self.status.set("Đã kết nối")
-            self.status_color = "#4CAF50"  # xanh
-            self.last_connect_time.set(time.strftime("%H:%M:%S"))
-            self.enable_file_send(True)
-            self.retry_btn.config(state="disabled")
+        if self.handshake_callback:
+            ok = self.handshake_callback()
+            if ok:
+                self.status.set("Đã kết nối")
+                self.status_color = "#4CAF50"  # xanh
+                self.last_connect_time.set(time.strftime("%H:%M:%S"))
+                self.enable_file_send(True)
+                self.retry_btn.config(state="disabled")
+            else:
+                self.status.set("Lỗi handshake")
+                self.status_color = "#F44336"  # đỏ
+                self.enable_file_send(False)
+                self.retry_btn.config(state="normal")
         else:
-            self.status.set("Lỗi handshake")
-            self.status_color = "#F44336"  # đỏ
-            self.enable_file_send(False)
-            self.retry_btn.config(state="normal")
+            self.log("error", "Chưa gán callback handshake!")
         self._draw_status_light(self.status_color)
         self.handshake_btn.config(state="normal")
 
@@ -192,6 +188,8 @@ class SenderGUI:
             return
         if self.send_file_callback:
             self.send_file_callback(file_path)
+        else:
+            self.log("error", "Chưa gán callback gửi file!")
 
     def enable_file_send(self, enable=True):
         state = "normal" if enable else "disabled"
