@@ -21,7 +21,7 @@ class Receiver:
     Thực hiện luồng: Handshake → Key Exchange → Receive & Decrypt → Send ACK/NACK
     """
     
-    def __init__(self, host: str = '0.0.0.0', port: int = 8003,
+    def __init__(self, host: str = '0.0.0.0', port: int = 8000,
                  receiver_id: str = 'receiver', output_dir: str = './data/output',
                  timeout: int = 30, log_callback=None, on_new_file=None):
         """

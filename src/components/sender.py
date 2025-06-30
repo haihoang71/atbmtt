@@ -21,7 +21,7 @@ class Sender:
     Thực hiện luồng: Handshake → Key Exchange → Encrypt & Send → Wait ACK
     """
     
-    def __init__(self, server1_host: str = 'localhost', server1_port: int = 8001,
+    def __init__(self, server1_host: str = 'localhost', server1_port: int = 8000,
                  sender_id: str = 'sender', timeout: int = 30, log_callback=None):
         """
         Khởi tạo Sender

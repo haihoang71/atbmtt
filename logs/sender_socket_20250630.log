@@ -4,3 +4,25 @@
 [2025-06-30 11:58:19] [INFO] [sender_socket] File logging: True
 [2025-06-30 11:58:19] [INFO] [sender_socket] Console logging: False
 [2025-06-30 11:58:21] [ERROR] [sender_socket] Lỗi kết nối: [WinError 10061] No connection could be made because the target machine actively refused it
+[2025-06-30 14:15:11] [INFO] [sender_socket] === LOGGER KHỞI TẠO: sender_socket ===
+[2025-06-30 14:15:11] [INFO] [sender_socket] Log directory: D:\Project\Legal_documment_transfer\logs
+[2025-06-30 14:15:11] [INFO] [sender_socket] Log level: INFO
+[2025-06-30 14:15:11] [INFO] [sender_socket] File logging: True
+[2025-06-30 14:15:11] [INFO] [sender_socket] Console logging: False
+[2025-06-30 14:15:12] [INFO] [sender_socket] Đã kết nối đến 192.168.137.76:8000
+[2025-06-30 14:15:12] [INFO] [sender_socket] Đã gửi message: HELLO
+[2025-06-30 14:15:43] [WARNING] [sender_socket] Socket timeout khi nhận dữ liệu
+[2025-06-30 14:27:21] [INFO] [sender_socket] === LOGGER KHỞI TẠO: sender_socket ===
+[2025-06-30 14:27:21] [INFO] [sender_socket] Log directory: D:\Project\Legal_documment_transfer\logs
+[2025-06-30 14:27:21] [INFO] [sender_socket] Log level: INFO
+[2025-06-30 14:27:21] [INFO] [sender_socket] File logging: True
+[2025-06-30 14:27:21] [INFO] [sender_socket] Console logging: False
+[2025-06-30 14:27:28] [ERROR] [sender_socket] Lỗi kết nối: [WinError 10061] No connection could be made because the target machine actively refused it
+[2025-06-30 14:33:41] [INFO] [sender_socket] === LOGGER KHỞI TẠO: sender_socket ===
+[2025-06-30 14:33:41] [INFO] [sender_socket] Log directory: D:\Project\Legal_documment_transfer\logs
+[2025-06-30 14:33:41] [INFO] [sender_socket] Log level: INFO
+[2025-06-30 14:33:41] [INFO] [sender_socket] File logging: True
+[2025-06-30 14:33:41] [INFO] [sender_socket] Console logging: False
+[2025-06-30 14:33:45] [INFO] [sender_socket] Đã kết nối đến 192.168.137.76:8000
+[2025-06-30 14:33:45] [INFO] [sender_socket] Đã gửi message: HELLO
+[2025-06-30 14:34:15] [WARNING] [sender_socket] Socket timeout khi nhận dữ liệu

@@ -31,7 +31,7 @@ class IntermediateServer:
     Server trung gian - Chuyển tiếp message giữa các components
     """
     
-    def __init__(self, server_id: str, host: str = 'localhost', port: int = 8001,
+    def __init__(self, server_id: str, host: str = 'localhost', port: int = 8000,
                  upstream_host: str = None, upstream_port: int = None,
                  log_dir: str = None, log_callback=None):
         """
@@ -86,10 +86,10 @@ class IntermediateServer:
             'start_time': time.time()
         }
         
-        self.logger.info(f"=== INTERMEDIATE SERVER KHỞI TẠO: {server_id} ===")
-        self.logger.info(f"Bind: {host}:{port}")
+        self._log("info", f"=== INTERMEDIATE SERVER KHỞI TẠO: {server_id} ===")
+        self._log("info", f"Bind: {host}:{port}")
         if upstream_host and upstream_port:
-            self.logger.info(f"Upstream: {upstream_host}:{upstream_port}")
+            self._log("info", f"Upstream: {upstream_host}:{upstream_port}")
 
     def start(self) -> bool:
         """
@@ -99,11 +99,11 @@ class IntermediateServer:
             bool: True nếu thành công
         """
         try:
-            self.logger.info(f"Khởi động {self.server_id}...")
+            self._log("info", f"Khởi động {self.server_id}...")
             
             # Khởi động socket server với callback
             if not self.socket_handler.start_server(message_callback=self._handle_message):
-                self.logger.error("Không thể khởi động socket server")
+                self._log("error", "Không thể khởi động socket server")
                 return False
             
             self.is_running = True
@@ -113,23 +113,23 @@ class IntermediateServer:
                 self.is_forwarding = True
                 forwarding_thread = threading.Thread(target=self._forwarding_worker, daemon=True)
                 forwarding_thread.start()
-                self.logger.info("Đã khởi động forwarding thread")
+                self._log("info", "Đã khởi động forwarding thread")
             
             # Khởi động connection cleanup thread
             cleanup_thread = threading.Thread(target=self._cleanup_worker, daemon=True)
             cleanup_thread.start()
-            self.logger.info("Đã khởi động cleanup thread")
+            self._log("info", "Đã khởi động cleanup thread")
             
-            self.logger.info(f"{self.server_id} ĐÃ KHỞI ĐỘNG THÀNH CÔNG!")
+            self._log("info", f"{self.server_id} ĐÃ KHỞI ĐỘNG THÀNH CÔNG!")
             return True
             
         except Exception as e:
-            self.logger.error(f"Lỗi khởi động server: {e}")
+            self._log("error", f"Lỗi khởi động server: {e}")
             return False
 
     def stop(self):
         """Dừng server"""
-        self.logger.info(f"Dừng {self.server_id}...")
+        self._log("info", f"Dừng {self.server_id}...")
         
         self.is_running = False
         self.is_forwarding = False
@@ -145,18 +145,18 @@ class IntermediateServer:
         # Cleanup protocol handler
         self.protocol_handler.cleanup()
         
-        self.logger.info(f"{self.server_id} Server stop")
+        self._log("info", f"{self.server_id} Server stop")
 
     def run(self):
         """Chạy server main loop"""
-        self.logger.info(f"Bắt đầu main loop của {self.server_id}")
+        self._log("info", f"Bắt đầu main loop của {self.server_id}")
         
         try:
             while self.is_running:
                 time.sleep(1)
                 
         except Exception as e:
-            self.logger.error(f"Lỗi trong main loop: {e}")
+            self._log("error", f"Lỗi trong main loop: {e}")
         finally:
             self.stop()
 
@@ -190,11 +190,11 @@ class IntermediateServer:
                 'timestamp': time.time(),
                 'retry_count': 0
             })
-            self.logger.debug(f"Thêm message {message.get('type')} vào forwarding queue")
+            self._log("debug", f"Thêm message {message.get('type')} vào forwarding queue")
 
     def _forwarding_worker(self):
         """Worker thread để forward messages"""
-        self.logger.info("Bắt đầu forwarding worker")
+        self._log("info", "Bắt đầu forwarding worker")
         
         while self.is_forwarding:
             try:
@@ -209,19 +209,19 @@ class IntermediateServer:
                 
                 if success:
                     self.stats['messages_forwarded'] += 1
-                    self.logger.debug(f"Forward message {queue_item['message'].get('type')} thành công")
+                    self._log("debug", f"Forward message {queue_item['message'].get('type')} thành công")
                 else:
                     if queue_item['retry_count'] < 3:
                         queue_item['retry_count'] += 1
                         with self.queue_lock:
                             self.message_queue.append(queue_item)
-                        self.logger.warning(f"Retry forward message {queue_item['message'].get('type')}")
+                        self._log("warning", f"Retry forward message {queue_item['message'].get('type')}")
                     else:
                         self.stats['messages_dropped'] += 1
-                        self.logger.error(f"Drop message {queue_item['message'].get('type')} sau 3 lần retry")
+                        self._log("error", f"Drop message {queue_item['message'].get('type')} sau 3 lần retry")
                 
             except Exception as e:
-                self.logger.error(f"Lỗi trong forwarding worker: {e}")
+                self._log("error", f"Lỗi trong forwarding worker: {e}")
                 time.sleep(1)
 
     def _receive_exact(self, sock, length):
@@ -294,7 +294,7 @@ class IntermediateServer:
         try:
             with self.connection_lock:
                 if client_id not in self.connections:
-                    self.logger.warning(f"Client {client_id} không tồn tại")
+                    self._log("warning", f"Client {client_id} không tồn tại")
                     return False
                 
                 conn_info = self.connections[client_id]
@@ -307,7 +307,7 @@ class IntermediateServer:
                 return True
                 
         except Exception as e:
-            self.logger.error(f"Lỗi gửi message đến {client_id}: {e}")
+            self._log("error", f"Lỗi gửi message đến {client_id}: {e}")
             return False
 
     def _close_connection(self, conn_info: ConnectionInfo):
@@ -315,13 +315,13 @@ class IntermediateServer:
         try:
             conn_info.socket.close()
             self.stats['connections_closed'] += 1
-            self.logger.info(f"Đóng connection {conn_info.client_id}")
+            self._log("info", f"Đóng connection {conn_info.client_id}")
         except Exception as e:
-            self.logger.error(f"Lỗi đóng connection {conn_info.client_id}: {e}")
+            self._log("error", f"Lỗi đóng connection {conn_info.client_id}: {e}")
 
     def _cleanup_worker(self):
         """Worker thread để cleanup connections cũ"""
-        self.logger.info("Bắt đầu cleanup worker")
+        self._log("info", "Bắt đầu cleanup worker")
         
         while self.is_running:
             try:
@@ -339,12 +339,12 @@ class IntermediateServer:
                     for client_id in expired_connections:
                         self._close_connection(self.connections[client_id])
                         del self.connections[client_id]
-                        self.logger.info(f"Đóng expired connection: {client_id}")
+                        self._log("info", f"Đóng expired connection: {client_id}")
                 
                 time.sleep(60)
                 
             except Exception as e:
-                self.logger.error(f"Lỗi trong cleanup worker: {e}")
+                self._log("error", f"Lỗi trong cleanup worker: {e}")
                 time.sleep(60)
 
     def get_statistics(self) -> Dict[str, Any]:
@@ -384,8 +384,8 @@ class IntermediateServer:
 
 
 # Factory functions
-def create_server1(host: str = 'localhost', port: int = 8001, 
-                  upstream_host: str = 'localhost', upstream_port: int = 8002, log_callback=None) -> 'IntermediateServer':
+def create_server1(host: str = 'localhost', port: int = 8000, 
+                  upstream_host: str = 'localhost', upstream_port: int = 8000, log_callback=None) -> 'IntermediateServer':
     """
     Tạo Server 1 (kết nối Sender -> Server 2)
     """
@@ -400,8 +400,8 @@ def create_server1(host: str = 'localhost', port: int = 8001,
     )
 
 
-def create_server2(host: str = 'localhost', port: int = 8002,
-                  upstream_host: str = 'localhost', upstream_port: int = 8003, log_callback=None) -> 'IntermediateServer':
+def create_server2(host: str = 'localhost', port: int = 8000,
+                  upstream_host: str = 'localhost', upstream_port: int = 8000, log_callback=None) -> 'IntermediateServer':
     """
     Tạo Server 2 (kết nối Server 1 -> Receiver)
     """

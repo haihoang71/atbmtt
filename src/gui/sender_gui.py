@@ -30,6 +30,13 @@ class SenderGUI:
         self.server_ip = tk.StringVar(value=config["server1_host"])
         self.server_port = tk.StringVar(value=str(config["server1_port"]))
 
+        # Khởi tạo Sender với log_callback
+        self.sender = Sender(
+            server1_host=config["server1_host"],
+            server1_port=config["server1_port"],
+            log_callback=self.log
+        )
+
         # Callbacks
         self.handshake_callback = None
         self.send_file_callback = None
@@ -67,8 +74,8 @@ class SenderGUI:
             self.file_path.set(path)
 
     def _on_handshake(self):
-        if self.handshake_callback:
-            self.handshake_callback()
+        # Gọi trực tiếp Sender.perform_handshake trong thread để log ra GUI
+        threading.Thread(target=self.sender.perform_handshake, daemon=True).start()
 
     def _on_send_file(self):
         file_path = self.file_path.get()
