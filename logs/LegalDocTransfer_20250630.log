@@ -43,3 +43,8 @@
 [2025-06-30 15:00:36] [INFO] [LegalDocTransfer] Log level: INFO
 [2025-06-30 15:00:36] [INFO] [LegalDocTransfer] File logging: True
 [2025-06-30 15:00:36] [INFO] [LegalDocTransfer] Console logging: False
+[2025-06-30 15:09:09] [INFO] [LegalDocTransfer] === LOGGER KHỞI TẠO: LegalDocTransfer ===
+[2025-06-30 15:09:09] [INFO] [LegalDocTransfer] Log directory: D:\Project\Legal_documment_transfer\logs
+[2025-06-30 15:09:09] [INFO] [LegalDocTransfer] Log level: INFO
+[2025-06-30 15:09:09] [INFO] [LegalDocTransfer] File logging: True
+[2025-06-30 15:09:09] [INFO] [LegalDocTransfer] Console logging: False

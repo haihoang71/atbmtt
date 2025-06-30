@@ -33,6 +33,11 @@ def main():
         log_callback=gui.log
     )
     server.logger.logger.addHandler(tk_handler)
+    server.logger.logger.propagate = True
+    server.socket_handler.logger.logger.addHandler(tk_handler)
+    server.socket_handler.logger.logger.propagate = True
+    server.protocol_handler.logger.logger.addHandler(tk_handler)
+    server.protocol_handler.logger.logger.propagate = True
     if not server.start():
         print("Không thể khởi động Server 1")
         return
