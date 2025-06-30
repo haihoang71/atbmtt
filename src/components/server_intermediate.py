@@ -163,17 +163,22 @@ class IntermediateServer:
     def _handle_message(self, message: Dict[str, Any], client_id: str) -> Optional[Any]:
         try:
             self.stats['messages_received'] += 1
-            self.logger.info(f"Nhận từ {client_id}: {message.get('type', 'UNKNOWN')}")
+            msg_type = message.get('type', 'UNKNOWN')
+            self._log("info", f"[RECV] Nhận từ {client_id}: {msg_type}")
+            if msg_type == 'HELLO':
+                self._log("info", f"[HANDSHAKE] Đã nhận gói HELLO từ {client_id}, forward tới Server2...")
             destination = message.get('destination')
             if destination and destination != self.server_id:
                 response = self._forward_message(message)
                 if response is None:
-                    self.logger.error("Forward message thất bại")
+                    self._log("error", f"[HANDSHAKE] Forward message HELLO thất bại (có thể Server2 chưa khởi động hoặc không phản hồi)")
                     return None
+                if msg_type == 'HELLO':
+                    self._log("info", f"[HANDSHAKE] Đã nhận phản hồi cho HELLO từ Server2, gửi lại cho {client_id}")
                 return response
             return None
         except Exception as e:
-            self.logger.error(f"Lỗi xử lý message từ {client_id}: {e}")
+            self._log("error", f"Lỗi xử lý message từ {client_id}: {e}")
             self.stats['errors'] += 1
             return None
 

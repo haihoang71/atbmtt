@@ -1,0 +1,6 @@
+[2025-06-30 11:58:19] [INFO] [sender_socket] === LOGGER KHỞI TẠO: sender_socket ===
+[2025-06-30 11:58:19] [INFO] [sender_socket] Log directory: D:\Project\Legal_documment_transfer\logs
+[2025-06-30 11:58:19] [INFO] [sender_socket] Log level: INFO
+[2025-06-30 11:58:19] [INFO] [sender_socket] File logging: True
+[2025-06-30 11:58:19] [INFO] [sender_socket] Console logging: False
+[2025-06-30 11:58:21] [ERROR] [sender_socket] Lỗi kết nối: [WinError 10061] No connection could be made because the target machine actively refused it

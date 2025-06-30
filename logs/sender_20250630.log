@@ -1,0 +1,6 @@
+[2025-06-30 11:58:17] [INFO] [sender] === LOGGER KHỞI TẠO: sender ===
+[2025-06-30 11:58:17] [INFO] [sender] Log directory: D:\Project\Legal_documment_transfer\logs
+[2025-06-30 11:58:17] [INFO] [sender] Log level: INFO
+[2025-06-30 11:58:17] [INFO] [sender] File logging: True
+[2025-06-30 11:58:17] [INFO] [sender] Console logging: False
+[2025-06-30 11:58:19] [INFO] [sender] [CRYPTO] Generated RSA 2048-bit keypair
