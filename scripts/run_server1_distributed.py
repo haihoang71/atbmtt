@@ -2,12 +2,13 @@ import sys
 from pathlib import Path
 import argparse
 import threading
+import logging
 sys.path.append(str(Path(__file__).parent.parent / "src"))
 sys.path.append(str(Path(__file__).parent.parent))
 
 from config.network_config import get_config
 from src.components.server_intermediate import create_server1
-from src.gui.server_gui import ServerGUI
+from src.gui.server_gui import ServerGUI, TkinterLogHandler
 
 def main():
     parser = argparse.ArgumentParser(description="Server1 (Distributed)")
@@ -22,6 +23,9 @@ def main():
         config["upstream_host"] = args.upstream_host
 
     gui = ServerGUI(server_name="Server 1")
+    tk_handler = TkinterLogHandler(gui.log)
+    tk_handler.setLevel(logging.DEBUG)
+    logging.getLogger().addHandler(tk_handler)
     server = create_server1(
         host=config["host"],
         port=config["port"],

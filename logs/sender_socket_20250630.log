@@ -40,3 +40,11 @@
 [2025-06-30 14:42:56] [INFO] [sender_socket] Đã kết nối đến 192.168.137.76:8000
 [2025-06-30 14:42:56] [INFO] [sender_socket] Đã gửi message: HELLO
 [2025-06-30 14:43:26] [WARNING] [sender_socket] Socket timeout khi nhận dữ liệu
+[2025-06-30 14:52:54] [INFO] [sender_socket] === LOGGER KHỞI TẠO: sender_socket ===
+[2025-06-30 14:52:54] [INFO] [sender_socket] Log directory: D:\Project\Legal_documment_transfer\logs
+[2025-06-30 14:52:54] [INFO] [sender_socket] Log level: INFO
+[2025-06-30 14:52:54] [INFO] [sender_socket] File logging: True
+[2025-06-30 14:52:54] [INFO] [sender_socket] Console logging: False
+[2025-06-30 14:52:56] [INFO] [sender_socket] Đã kết nối đến 192.168.137.76:8000
+[2025-06-30 14:52:56] [INFO] [sender_socket] Đã gửi message: HELLO
+[2025-06-30 14:53:26] [WARNING] [sender_socket] Socket timeout khi nhận dữ liệu

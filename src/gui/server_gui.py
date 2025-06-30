@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import scrolledtext
+import logging
 
 class ServerGUI:
     def __init__(self, server_name="Server"):
@@ -16,4 +17,14 @@ class ServerGUI:
         self.log_text.config(state="disabled")
 
     def run(self):
-        self.root.mainloop() 
+        self.root.mainloop()
+
+class TkinterLogHandler(logging.Handler):
+    def __init__(self, gui_log_func):
+        super().__init__()
+        self.gui_log_func = gui_log_func
+
+    def emit(self, record):
+        msg = self.format(record)
+        level = record.levelname.lower()
+        self.gui_log_func(level, msg) 
