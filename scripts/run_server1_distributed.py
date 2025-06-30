@@ -25,7 +25,6 @@ def main():
     gui = ServerGUI(server_name="Server 1")
     tk_handler = TkinterLogHandler(gui.log)
     tk_handler.setLevel(logging.DEBUG)
-    logging.getLogger().addHandler(tk_handler)
     server = create_server1(
         host=config["host"],
         port=config["port"],
@@ -33,6 +32,7 @@ def main():
         upstream_port=config["upstream_port"],
         log_callback=gui.log
     )
+    server.logger.logger.addHandler(tk_handler)
     if not server.start():
         print("Không thể khởi động Server 1")
         return
