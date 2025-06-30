@@ -44,7 +44,3 @@ TP.HCM, ngày 15 tháng 01 năm 2024
 
 BÊN BÁN                                    BÊN MUA
 (Ký, ghi rõ họ tên)                       (Ký, ghi rõ họ tên)
-
-================================
-Đây là tài liệu pháp lý được mã hóa và truyền an toàn
-qua hệ thống Legal Document Transfer System.

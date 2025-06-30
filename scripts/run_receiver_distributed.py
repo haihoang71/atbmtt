@@ -1,8 +1,10 @@
 import sys
+import os
 from pathlib import Path
 import argparse
-sys.path.append(str(Path(__file__).parent.parent / "src"))
-sys.path.append(str(Path(__file__).parent.parent))
+
+project_root = str(Path(__file__).parent.parent)
+sys.path.insert(0, project_root)
 
 from config.network_config import get_config
 from src.components.receiver import Receiver
