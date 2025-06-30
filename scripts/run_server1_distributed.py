@@ -21,19 +21,18 @@ def main():
     if args.upstream_host:
         config["upstream_host"] = args.upstream_host
 
+    gui = ServerGUI(server_name="Server 1")
     server = create_server1(
         host=config["host"],
         port=config["port"],
         upstream_host=config["upstream_host"],
-        upstream_port=config["upstream_port"]
+        upstream_port=config["upstream_port"],
+        log_callback=gui.log
     )
-    
     if not server.start():
         print("Không thể khởi động Server 1")
         return
-        
     threading.Thread(target=server.run, daemon=True).start()
-    gui = ServerGUI(server_name="Server 1")
     gui.run()
 
 if __name__ == "__main__":

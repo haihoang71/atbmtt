@@ -22,3 +22,15 @@
 [2025-06-30 14:33:40] [INFO] [sender] File logging: True
 [2025-06-30 14:33:40] [INFO] [sender] Console logging: False
 [2025-06-30 14:33:41] [INFO] [sender] [CRYPTO] Generated RSA 2048-bit keypair
+[2025-06-30 14:41:29] [INFO] [sender] === LOGGER KHỞI TẠO: sender ===
+[2025-06-30 14:41:29] [INFO] [sender] Log directory: D:\Project\Legal_documment_transfer\logs
+[2025-06-30 14:41:29] [INFO] [sender] Log level: INFO
+[2025-06-30 14:41:29] [INFO] [sender] File logging: True
+[2025-06-30 14:41:29] [INFO] [sender] Console logging: False
+[2025-06-30 14:41:30] [INFO] [sender] [CRYPTO] Generated RSA 2048-bit keypair
+[2025-06-30 14:42:54] [INFO] [sender] === LOGGER KHỞI TẠO: sender ===
+[2025-06-30 14:42:54] [INFO] [sender] Log directory: D:\Project\Legal_documment_transfer\logs
+[2025-06-30 14:42:54] [INFO] [sender] Log level: INFO
+[2025-06-30 14:42:54] [INFO] [sender] File logging: True
+[2025-06-30 14:42:54] [INFO] [sender] Console logging: False
+[2025-06-30 14:42:55] [INFO] [sender] [CRYPTO] Generated RSA 2048-bit keypair
